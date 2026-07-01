@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solomon Virgo — Consulting Launch Roadmap</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F6F2;
+    --surface: #FFFFFF;
+    --surface-2: #F0EEE9;
+    --border: #E2DFD8;
+    --border-strong: #C8C5BC;
+    --text-primary: #1A1A18;
+    --text-secondary: #5A5850;
+    --text-muted: #9A9890;
+    --accent: #1B5E8A;
+    --accent-light: #EBF3FA;
+    --accent-border: #A8CAE0;
+    --green: #1A7A50;
+    --green-light: #E8F5EE;
+    --green-border: #A0D4BB;
+    --green-fill: #1A7A50;
+    --amber: #8A5C00;
+    --amber-light: #FDF3E0;
+    --amber-border: #F0CC80;
+    --coral: #8A3020;
+    --coral-light: #FAEAE6;
+    --coral-border: #F0B0A0;
+    --purple: #5A3A8A;
+    --purple-light: #F0EBFA;
+    --purple-border: #C0A8E0;
+    --teal: #0F6E56;
+    --teal-light: #E1F5EE;
+    --teal-border: #9FE1CB;
+    --radius: 8px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.07), 0 0 0 0.5px rgba(0,0,0,0.05);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .shell { display: flex; min-height: 100vh; }
+
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    overflow-y: auto;
+    z-index: 10;
+  }
+  .sidebar-header {
+    padding: 20px 18px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--accent); color: #fff;
+    font-size: 16px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .sidebar-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .sidebar-title { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+  .sidebar-badge {
+    font-size: 10px; font-weight: 500;
+    background: var(--accent-light); color: var(--accent);
+    border: 0.5px solid var(--accent-border);
+    border-radius: 4px; padding: 2px 7px;
+    display: inline-block; margin-top: 6px;
+  }
+
+  .nav { padding: 10px; flex: 1; }
+  .nav-section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--text-muted);
+    padding: 8px 8px 4px; display: block;
+  }
+  .nav-btn {
+    display: flex; align-items: center; gap: 9px;
+    width: 100%; padding: 8px 10px; border-radius: var(--radius);
+    border: none; background: none; cursor: pointer;
+    font-size: 13px; color: var(--text-secondary);
+    text-align: left; transition: background 0.12s;
+    font-family: inherit; margin-bottom: 2px;
+  }
+  .nav-btn:hover { background: var(--surface-2); color: var(--text-primary); }
+  .nav-btn.active { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+  .nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto; font-size: 10px; font-weight: 600;
+    background: var(--border); color: var(--text-muted);
+    border-radius: 10px; padding: 1px 6px; min-width: 20px; text-align: center;
+  }
+  .nav-btn.active .nav-badge { background: var(--accent); color: #fff; }
+
+  .phase-nav { margin-bottom: 2px; }
+  .phase-nav-btn {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 6px 10px; border-radius: var(--radius);
+    border: none; background: none; cursor: pointer;
+    font-size: 12px; color: var(--text-muted);
+    text-align: left; font-family: inherit;
+    transition: background 0.12s;
+  }
+  .phase-nav-btn:hover { background: var(--surface-2); color: var(--text-secondary); }
+  .phase-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .sidebar-footer {
+    padding: 14px 18px;
+    border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--text-muted); line-height: 1.6;
+  }
+
+  /* Main */
+  .main { margin-left: 250px; flex: 1; padding: 32px 40px; max-width: 900px; }
+
+  /* Panels */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* Page header */
+  .page-header { margin-bottom: 24px; }
+  .page-title { font-size: 22px; font-weight: 600; color: var(--text-primary); }
+  .page-sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 14px 16px;
+    box-shadow: var(--shadow); text-align: center;
+  }
+  .stat-num { font-size: 22px; font-weight: 600; color: var(--text-primary); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* Progress */
+  .progress-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 22px; margin-bottom: 24px;
+    box-shadow: var(--shadow);
+  }
+  .progress-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .progress-title { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+  .progress-pct { font-size: 18px; font-weight: 600; color: var(--accent); }
+  .progress-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+  .progress-fill { height: 100%; border-radius: 4px; background: var(--green-fill); transition: width 0.4s ease; }
+  .progress-phases { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 12px; }
+  .phase-mini {
+    text-align: center; padding: 6px 4px;
+    border-radius: 6px; border: 0.5px solid var(--border);
+    background: var(--bg);
+  }
+  .phase-mini-label { font-size: 10px; color: var(--text-muted); margin-bottom: 3px; }
+  .phase-mini-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .phase-mini-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+
+  /* Phase sections */
+  .phase-section { margin-bottom: 32px; scroll-margin-top: 20px; }
+  .phase-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-pill {
+    font-size: 11px; font-weight: 500; padding: 4px 12px;
+    border-radius: 20px; flex-shrink: 0;
+    border: 0.5px solid transparent;
+  }
+  .ph1 { background: var(--accent-light); color: var(--accent); border-color: var(--accent-border); }
+  .ph2 { background: var(--purple-light); color: var(--purple); border-color: var(--purple-border); }
+  .ph3 { background: var(--teal-light); color: var(--teal); border-color: var(--teal-border); }
+  .ph4 { background: var(--amber-light); color: var(--amber); border-color: var(--amber-border); }
+  .ph5 { background: var(--coral-light); color: var(--coral); border-color: var(--coral-border); }
+  .phase-title-text { font-size: 15px; font-weight: 500; color: var(--text-primary); }
+  .phase-sub-text { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .phase-count { margin-left: auto; font-size: 11px; color: var(--text-muted); }
+
+  /* Step cards */
+  .step-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; margin-bottom: 8px;
+    display: flex; gap: 14px; align-items: flex-start;
+    cursor: pointer; transition: border-color 0.15s, opacity 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .step-card:hover { border-color: var(--border-strong); }
+  .step-card.done { opacity: 0.55; }
+  .step-num {
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 1.5px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500; color: var(--text-muted);
+    flex-shrink: 0; transition: all 0.2s; background: var(--bg);
+  }
+  .step-card.done .step-num {
+    background: var(--green-light); border-color: var(--green-border);
+    color: var(--green);
+  }
+  .step-body { flex: 1; min-width: 0; }
+  .step-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+  .step-card.done .step-title { text-decoration: line-through; color: var(--text-muted); }
+  .step-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+  .step-desc a { color: var(--accent); }
+  .step-footer { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .step-tag {
+    font-size: 10px; font-weight: 500; padding: 2px 9px;
+    border-radius: 20px; border: 0.5px solid transparent;
+  }
+  .tag-foundation { background: var(--accent-light); color: var(--accent); border-color: var(--accent-border); }
+  .tag-brand { background: var(--purple-light); color: var(--purple); border-color: var(--purple-border); }
+  .tag-portfolio { background: var(--teal-light); color: var(--teal); border-color: var(--teal-border); }
+  .tag-ops { background: var(--surface-2); color: var(--text-secondary); border-color: var(--border-strong); }
+  .tag-marketing { background: var(--amber-light); color: var(--amber); border-color: var(--amber-border); }
+  .tag-revenue { background: var(--coral-light); color: var(--coral); border-color: var(--coral-border); }
+  .tag-growth { background: var(--green-light); color: var(--green); border-color: var(--green-border); }
+  .step-time { font-size: 11px; color: var(--text-muted); }
+
+  /* Action buttons */
+  .action-section { margin-top: 28px; }
+  .action-label { font-size: 11px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .action-btn {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; padding: 12px 16px; margin-bottom: 8px;
+    border-radius: var(--radius); border: 1px solid var(--border);
+    background: var(--surface); cursor: pointer;
+    font-size: 13px; color: var(--text-secondary);
+    text-align: left; font-family: inherit;
+    box-shadow: var(--shadow); transition: border-color 0.15s, background 0.12s;
+  }
+  .action-btn:hover { border-color: var(--accent-border); background: var(--accent-light); color: var(--accent); }
+  .action-icon { font-size: 16px; flex-shrink: 0; }
+  .action-text { flex: 1; }
+  .action-title { font-size: 13px; font-weight: 500; color: inherit; }
+  .action-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .action-arr { margin-left: auto; font-size: 16px; color: var(--text-muted); }
+
+  /* Revenue projections */
+  .projection-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .proj-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .proj-year { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; }
+  .proj-amount { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .proj-detail { font-size: 11px; color: var(--text-muted); line-height: 1.5; }
+  .income-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+  .income-row:last-child { border-bottom: none; }
+  .income-label { color: var(--text-secondary); }
+  .income-val { font-weight: 500; color: var(--text-primary); }
+  .income-bar-track { width: 80px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .income-bar-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+
+  /* Resources tab */
+  .resource-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px; margin-bottom: 10px;
+    box-shadow: var(--shadow);
+  }
+  .resource-title { font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .resource-body { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+  .resource-link { color: var(--accent); text-decoration: none; font-size: 12px; }
+  .resource-link:hover { text-decoration: underline; }
+  .link-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--border); }
+  .link-row:last-child { border-bottom: none; }
+  .link-label { font-size: 12px; color: var(--text-secondary); flex: 1; }
+  .link-url { font-size: 12px; color: var(--accent); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--text-primary); color: #fff;
+    font-size: 13px; padding: 10px 18px; border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.2s, transform 0.2s;
+    pointer-events: none; z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* Reset btn */
+  .reset-btn {
+    font-size: 11px; background: none;
+    border: 0.5px solid var(--border); border-radius: 6px;
+    padding: 4px 10px; cursor: pointer; color: var(--text-muted);
+    font-family: inherit;
+  }
+  .reset-btn:hover { background: var(--surface-2); }
+
+  @media (max-width: 740px) {
+    .sidebar { width: 200px; }
+    .main { margin-left: 200px; padding: 20px 18px; }
+    .stats-row, .projection-grid { grid-template-columns: 1fr 1fr; }
+    .progress-phases { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">SV</div>
+    <div class="sidebar-name">Solomon M. Virgo</div>
+    <div class="sidebar-title">Product Commercialization &amp;<br>Manufacturing Readiness Consultant</div>
+    <div class="sidebar-badge">12-Month Launch Plan</div>
+  </div>
+
+  <nav class="nav">
+    <span class="nav-section-label">Navigation</span>
+    <button class="nav-btn active" onclick="switchPanel('roadmap')" id="nav-roadmap">
+      <span class="nav-icon">🗺️</span> Roadmap
+      <span class="nav-badge" id="nav-count">0/24</span>
+    </button>
+    <button class="nav-btn" onclick="switchPanel('revenue')" id="nav-revenue">
+      <span class="nav-icon">💰</span> Revenue projections
+    </button>
+    <button class="nav-btn" onclick="switchPanel('resources')" id="nav-resources">
+      <span class="nav-icon">🔗</span> Resources &amp; tools
+    </button>
+    <button class="nav-btn" onclick="switchPanel('actions')" id="nav-actions">
+      <span class="nav-icon">⚡</span> Quick actions
+    </button>
+
+    <span class="nav-section-label" style="margin-top:12px;">Jump to phase</span>
+    <button class="phase-nav-btn" onclick="jumpTo('phase1')">
+      <div class="phase-dot" style="background:var(--accent);"></div> Phase 1 — Foundation
+    </button>
+    <button class="phase-nav-btn" onclick="jumpTo('phase2')">
+      <div class="phase-dot" style="background:var(--purple);"></div> Phase 2 — Brand
+    </button>
+    <button class="phase-nav-btn" onclick="jumpTo('phase3')">
+      <div class="phase-dot" style="background:var(--teal);"></div> Phase 3 — Portfolio
+    </button>
+    <button class="phase-nav-btn" onclick="jumpTo('phase4')">
+      <div class="phase-dot" style="background:var(--amber);"></div> Phase 4 — Market
+    </button>
+    <button class="phase-nav-btn" onclick="jumpTo('phase5')">
+      <div class="phase-dot" style="background:var(--coral);"></div> Phase 5 — Revenue
+    </button>
+  </nav>
+
+  <div class="sidebar-footer">
+    Progress saves automatically.<br>
+    Open in the same browser each time.
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- ROADMAP PANEL -->
+  <div id="panel-roadmap" class="panel active">
+    <div class="page-header">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="page-title">Consulting launch roadmap</div>
+          <div class="page-sub">Click any step to mark it complete · 2–3 hrs/week · 12-month plan</div>
+        </div>
+        <button class="reset-btn" onclick="resetAll()">Reset progress</button>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">$0</div><div class="stat-label">Startup cost</div></div>
+      <div class="stat-card"><div class="stat-num">2–3h</div><div class="stat-label">Per week</div></div>
+      <div class="stat-card"><div class="stat-num">$150</div><div class="stat-label">Target rate/hr</div></div>
+      <div class="stat-card"><div class="stat-num" id="days-count">—</div><div class="stat-label">Days since start</div></div>
+    </div>
+
+    <div class="progress-card">
+      <div class="progress-top">
+        <span class="progress-title">Overall progress — <span id="steps-done">0</span> of 24 steps complete</span>
+        <span class="progress-pct" id="pct-display">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="main-fill" style="width:0%"></div></div>
+      <div class="progress-phases">
+        <div class="phase-mini">
+          <div class="phase-mini-label" style="color:var(--accent);">Phase 1</div>
+          <div class="phase-mini-bar"><div class="phase-mini-fill" id="ph1-fill" style="background:var(--accent);width:0%"></div></div>
+        </div>
+        <div class="phase-mini">
+          <div class="phase-mini-label" style="color:var(--purple);">Phase 2</div>
+          <div class="phase-mini-bar"><div class="phase-mini-fill" id="ph2-fill" style="background:var(--purple);width:0%"></div></div>
+        </div>
+        <div class="phase-mini">
+          <div class="phase-mini-label" style="color:var(--teal);">Phase 3</div>
+          <div class="phase-mini-bar"><div class="phase-mini-fill" id="ph3-fill" style="background:var(--teal);width:0%"></div></div>
+        </div>
+        <div class="phase-mini">
+          <div class="phase-mini-label" style="color:var(--amber);">Phase 4</div>
+          <div class="phase-mini-bar"><div class="phase-mini-fill" id="ph4-fill" style="background:var(--amber);width:0%"></div></div>
+        </div>
+        <div class="phase-mini">
+          <div class="phase-mini-label" style="color:var(--coral);">Phase 5</div>
+          <div class="phase-mini-bar"><div class="phase-mini-fill" id="ph5-fill" style="background:var(--coral);width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="phase-section" id="phase1">
+      <div class="phase-header">
+        <div class="phase-pill ph1">Phase 1 · Months 1–2</div>
+        <div>
+          <div class="phase-title-text">Business foundation</div>
+          <div class="phase-sub-text">Name · Legal · Positioning · Pricing</div>
+        </div>
+        <div class="phase-count" id="ph1-count">0/5</div>
+      </div>
+
+      <div class="step-card" id="s1" onclick="toggle(1)">
+        <div class="step-num" id="n1">1</div>
+        <div class="step-body">
+          <div class="step-title">Choose your business name</div>
+          <div class="step-desc">Shortlist 3 names using the Virgo brand. Strong options: <strong>Virgo Manufacturing Solutions</strong>, <strong>Virgo NPI Consulting</strong>, or <strong>Virgo Product Commercialization</strong>. Check availability at <a href="https://www.bcregistrynames.gov.bc.ca" target="_blank">bcregistrynames.gov.bc.ca</a>. Keep it broad enough to cover future services including training and digital products.</div>
+          <div class="step-footer"><span class="step-tag tag-foundation">Foundation</span><span class="step-time">1 evening · ~1.5 hrs</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s2" onclick="toggle(2)">
+        <div class="step-num" id="n2">2</div>
+        <div class="step-body">
+          <div class="step-title">Register as a sole proprietor in BC</div>
+          <div class="step-desc">Register your business name with BC Registry Services online. Sole proprietor is the fastest and cheapest structure — you can incorporate later when revenue justifies it. Cost is approximately $50–80. No lawyer needed at this stage. Keep your registration certificate — you'll need it to open your business bank account.</div>
+          <div class="step-footer"><span class="step-tag tag-foundation">Foundation</span><span class="step-time">1 evening · ~1 hr online</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s3" onclick="toggle(3)">
+        <div class="step-num" id="n3">3</div>
+        <div class="step-body">
+          <div class="step-title">Open a dedicated business bank account</div>
+          <div class="step-desc">Keep business income completely separate from personal finances from day one. Most major Canadian banks offer free or low-cost small business accounts. Bring your BC registration certificate. This makes tax time simple and looks professional when clients pay you.</div>
+          <div class="step-footer"><span class="step-tag tag-foundation">Foundation</span><span class="step-time">1 hr · in-branch visit</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s4" onclick="toggle(4)">
+        <div class="step-num" id="n4">4</div>
+        <div class="step-body">
+          <div class="step-title">Write your positioning statement</div>
+          <div class="step-desc">One sentence that describes what you do, who you serve, and what outcome you deliver. Starting point: <em>"I help small and mid-size manufacturers reduce risk and accelerate product launches through expert NPI and manufacturing readiness consulting."</em> Refine it until it flows naturally in conversation. This becomes the headline of everything you do.</div>
+          <div class="step-footer"><span class="step-tag tag-foundation">Foundation</span><span class="step-time">1 evening · ~1 hr</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s5" onclick="toggle(5)">
+        <div class="step-num" id="n5">5</div>
+        <div class="step-body">
+          <div class="step-title">Set your pricing structure</div>
+          <div class="step-desc">Establish three rates before any client conversation: Hourly ($125–150/hr for general consulting), Project-based ($2,500–5,000 for a Manufacturing Readiness Audit), Monthly retainer ($2,000–3,000/month for fractional engagements). Write these down and commit to them. Knowing your numbers before a conversation is the difference between confident and desperate.</div>
+          <div class="step-footer"><span class="step-tag tag-foundation">Foundation</span><span class="step-time">1 evening · ~1 hr</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase-section" id="phase2">
+      <div class="phase-header">
+        <div class="phase-pill ph2">Phase 2 · Months 2–4</div>
+        <div>
+          <div class="phase-title-text">Brand and online presence</div>
+          <div class="phase-sub-text">LinkedIn · Website · Capability statement</div>
+        </div>
+        <div class="phase-count" id="ph2-count">0/4</div>
+      </div>
+
+      <div class="step-card" id="s6" onclick="toggle(6)">
+        <div class="step-num" id="n6">6</div>
+        <div class="step-body">
+          <div class="step-title">Overhaul your LinkedIn profile for consulting</div>
+          <div class="step-desc">Update your headline from job title to value statement: <em>"NPI &amp; Manufacturing Readiness Consultant | Helping Manufacturers Launch Products Faster"</em>. Rewrite your About section to speak to potential clients, not employers — what problem do you solve, not where have you worked. Add consulting positioning to the Featured section. LinkedIn is your most powerful marketing asset right now.</div>
+          <div class="step-footer"><span class="step-tag tag-brand">Brand</span><span class="step-time">2 evenings · ~3 hrs total</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s7" onclick="toggle(7)">
+        <div class="step-num" id="n7">7</div>
+        <div class="step-body">
+          <div class="step-title">Write and publish your first LinkedIn article</div>
+          <div class="step-desc">Suggested title: <em>"10 Reasons New Product Launches Fail — And How to Avoid Them."</em> Draw from your 30 years of real NPI experience across 6 industries. Aim for 700–900 words. This single post begins establishing you as a thought leader to the exact audience you want to reach. Use Claude to help structure and polish it — the ideas and experience are yours.</div>
+          <div class="step-footer"><span class="step-tag tag-brand">Brand</span><span class="step-time">2 evenings · ~2.5 hrs</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s8" onclick="toggle(8)">
+        <div class="step-num" id="n8">8</div>
+        <div class="step-body">
+          <div class="step-title">Build a simple professional website</div>
+          <div class="step-desc">Use Wix, Squarespace, or Webflow. You need five pages: Home (positioning + services overview), About (your story and credentials), Services (detailed), Blog/Insights (for LinkedIn article reposts), and Contact. Domain suggestion: virgoMFGsolutions.com or virgoNPI.com (~$15/yr). Hosting ~$15–20/month. Clean and professional beats fancy and complex every time.</div>
+          <div class="step-footer"><span class="step-tag tag-brand">Brand</span><span class="step-time">3–4 evenings · ~6 hrs total</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s9" onclick="toggle(9)">
+        <div class="step-num" id="n9">9</div>
+        <div class="step-body">
+          <div class="step-title">Create a one-page capability statement (PDF)</div>
+          <div class="step-desc">A professional PDF you can email or share with potential clients and referral contacts. Include: positioning statement, core service lines (NPI Consulting, Manufacturing Readiness, Technical Documentation), industries served, key credentials (30+ years, 100+ products launched, B.Eng. 1st Class Honours), and contact details. This is your business card for serious conversations.</div>
+          <div class="step-footer"><span class="step-tag tag-brand">Brand</span><span class="step-time">1 evening · ~2 hrs</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase-section" id="phase3">
+      <div class="phase-header">
+        <div class="phase-pill ph3">Phase 3 · Months 4–7</div>
+        <div>
+          <div class="phase-title-text">Service portfolio and operations</div>
+          <div class="phase-sub-text">Templates · Deliverables · Contracts · Invoicing</div>
+        </div>
+        <div class="phase-count" id="ph3-count">0/5</div>
+      </div>
+
+      <div class="step-card" id="s10" onclick="toggle(10)">
+        <div class="step-num" id="n10">10</div>
+        <div class="step-body">
+          <div class="step-title">Document your NPI consulting service package</div>
+          <div class="step-desc">Write down exactly what a client gets when they hire you for NPI Consulting: what you assess, what you deliver, what a typical engagement looks like week by week, and what success looks like at the end. This becomes your proposal template. Think of your Bailey NPI Framework — that same structured thinking, adapted for external clients.</div>
+          <div class="step-footer"><span class="step-tag tag-portfolio">Portfolio</span><span class="step-time">2 evenings · ~3 hrs</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s11" onclick="toggle(11)">
+        <div class="step-num" id="n11">11</div>
+        <div class="step-body">
+          <div class="step-title">Build 3 reusable deliverable templates</div>
+          <div class="step-desc">Create professional templates for: (1) Manufacturing Readiness Assessment checklist, (2) NPI Gate Review template (EVT/DVT/PVT), (3) PFMEA starter template. These become your working tools with clients and eventually your first digital products for sale. Use your existing Bailey documents as the base — strip out anything proprietary and build the general framework.</div>
+          <div class="step-footer"><span class="step-tag tag-portfolio">Portfolio</span><span class="step-time">3 evenings · ~5 hrs total</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s12" onclick="toggle(12)">
+        <div class="step-num" id="n12">12</div>
+        <div class="step-body">
+          <div class="step-title">Write a consulting proposal template</div>
+          <div class="step-desc">Create a clean Word/PDF proposal you can customize per client in under an hour. Sections: Executive Summary, Understanding of Your Challenge, Scope of Work, Deliverables, Timeline, Investment (pricing), About Solomon Virgo, Terms and Conditions. Having this ready means you can respond to any opportunity within 24 hours — speed signals professionalism and wins work.</div>
+          <div class="step-footer"><span class="step-tag tag-portfolio">Portfolio</span><span class="step-time">1 evening · ~2 hrs</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s13" onclick="toggle(13)">
+        <div class="step-num" id="n13">13</div>
+        <div class="step-body">
+          <div class="step-title">Set up invoicing and register for GST/HST</div>
+          <div class="step-desc">Use Wave (free) or FreshBooks (~$15/month) to send professional invoices. Register for a GST/HST number with CRA — required once you expect to exceed $30,000 in annual consulting revenue. A good problem to plan for now. Consult a bookkeeper for a one-time setup session (~$100–200) to establish your books correctly from the start.</div>
+          <div class="step-footer"><span class="step-tag tag-ops">Operations</span><span class="step-time">1 evening · ~1.5 hrs setup</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s14" onclick="toggle(14)">
+        <div class="step-num" id="n14">14</div>
+        <div class="step-body">
+          <div class="step-title">Draft a consulting agreement</div>
+          <div class="step-desc">A 1–2 page contract covering: scope of work, payment terms (50% upfront recommended), IP ownership (your templates stay yours), confidentiality, and termination clause. Search "consulting agreement template Canada BC" — adapt a free template for your situation. Have a lawyer review it once (~$200–300). This protects you and signals professionalism to serious clients.</div>
+          <div class="step-footer"><span class="step-tag tag-ops">Operations</span><span class="step-time">1 evening · ~1.5 hrs</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase-section" id="phase4">
+      <div class="phase-header">
+        <div class="phase-pill ph4">Phase 4 · Months 7–10</div>
+        <div>
+          <div class="phase-title-text">Market and build your network</div>
+          <div class="phase-sub-text">Warm outreach · Content · Communities</div>
+        </div>
+        <div class="phase-count" id="ph4-count">0/5</div>
+      </div>
+
+      <div class="step-card" id="s15" onclick="toggle(15)">
+        <div class="step-num" id="n15">15</div>
+        <div class="step-body">
+          <div class="step-title">Map your warm network — identify 20 key contacts</div>
+          <div class="step-desc">List 20 people who already know your work: former colleagues and managers from Eaton, Teledyne FLIR, Cadex, Vecima, OMNEX, Brooks Automation, Scientific Atlanta, Cable &amp; Wireless. Supply chain contacts, OEM contacts, past collaborators. These are your first referral sources — people who already trust you. You don't pitch them. You reconnect genuinely and let them know you're consulting.</div>
+          <div class="step-footer"><span class="step-tag tag-marketing">Marketing</span><span class="step-time">1 evening · ~1 hr</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s16" onclick="toggle(16)">
+        <div class="step-num" id="n16">16</div>
+        <div class="step-body">
+          <div class="step-title">Send 5 warm outreach messages per month</div>
+          <div class="step-desc">Not pitches — genuine reconnections. Something like: <em>"Hey [name], been a while. I've started a consulting practice focused on NPI and manufacturing readiness for manufacturers. Would love to catch up sometime."</em> That's it. From 20 contacts over several months, 2–3 conversations will naturally turn into referrals or direct opportunities. Consistency matters far more than volume.</div>
+          <div class="step-footer"><span class="step-tag tag-marketing">Marketing</span><span class="step-time">30 min/month · ongoing</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s17" onclick="toggle(17)">
+        <div class="step-num" id="n17">17</div>
+        <div class="step-body">
+          <div class="step-title">Post one piece of LinkedIn content per week</div>
+          <div class="step-desc">Rotate between four content types: (1) a lesson from your career, (2) a manufacturing or NPI problem you've solved, (3) a tip or insight about DFM, PFMEA, production readiness, (4) a question that sparks discussion. Each post is 150–250 words. You're not trying to go viral — you're building credibility with the 50–100 people who will eventually refer or hire you. Use Claude to draft and refine.</div>
+          <div class="step-footer"><span class="step-tag tag-marketing">Marketing</span><span class="step-time">30–45 min/week · ongoing</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s18" onclick="toggle(18)">
+        <div class="step-num" id="n18">18</div>
+        <div class="step-body">
+          <div class="step-title">Join 2 manufacturing LinkedIn groups and engage</div>
+          <div class="step-desc">Search for: "Manufacturing Engineering," "NPI Engineering," "Medical Device Manufacturing," "Lean Manufacturing," "Industrial Automation." Engage authentically — answer questions, share genuine insights, add value to discussions. This expands your reach beyond existing connections and positions you as a contributing expert, not a job seeker or salesperson.</div>
+          <div class="step-footer"><span class="step-tag tag-marketing">Marketing</span><span class="step-time">30 min setup + 15 min/week</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s19" onclick="toggle(19)">
+        <div class="step-num" id="n19">19</div>
+        <div class="step-body">
+          <div class="step-title">Create a profile on one consulting platform</div>
+          <div class="step-desc">Register on Toptal, Expert360, or Kolabtree for technical consulting. These platforms connect experienced consultants with companies seeking short-term expertise without hiring full-time. Your 30+ years across 6 industries and B.Eng. 1st Class Honours will stand out. Don't rely on it as your only channel — treat it as a parallel pipeline that may deliver your first paid engagement.</div>
+          <div class="step-footer"><span class="step-tag tag-marketing">Marketing</span><span class="step-time">1 evening · ~1.5 hrs</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 5 -->
+    <div class="phase-section" id="phase5">
+      <div class="phase-header">
+        <div class="phase-pill ph5">Phase 5 · Months 10–12</div>
+        <div>
+          <div class="phase-title-text">Land first client and build revenue</div>
+          <div class="phase-sub-text">Discovery calls · First engagement · Testimonial · Digital products</div>
+        </div>
+        <div class="phase-count" id="ph5-count">0/5</div>
+      </div>
+
+      <div class="step-card" id="s20" onclick="toggle(20)">
+        <div class="step-num" id="n20">20</div>
+        <div class="step-body">
+          <div class="step-title">Offer free 60-minute Manufacturing Readiness Calls</div>
+          <div class="step-desc">To warm prospects and new connections, offer a no-obligation discovery call where you assess one specific manufacturing or NPI challenge they have. In 60 minutes you will demonstrate more value than most engineers show in a month. This is your foot in the door. Many of these calls convert naturally to paid engagements — not because you sell, but because you've already helped.</div>
+          <div class="step-footer"><span class="step-tag tag-revenue">Revenue</span><span class="step-time">1 hr per call · schedule as ready</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s21" onclick="toggle(21)">
+        <div class="step-num" id="n21">21</div>
+        <div class="step-body">
+          <div class="step-title">Land and deliver your first paid engagement</div>
+          <div class="step-desc">Your first client does not need to be large. A 10-hour NPI assessment at $150/hr = $1,500. A small technical documentation project. A one-day Manufacturing Readiness Audit for $2,500. The goal is one paying client, excellent work delivered, and a testimonial earned. That first engagement is the proof of concept that opens every door after it. Aim for this by month 12.</div>
+          <div class="step-footer"><span class="step-tag tag-revenue">Revenue</span><span class="step-time">Target: before month 12</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s22" onclick="toggle(22)">
+        <div class="step-num" id="n22">22</div>
+        <div class="step-body">
+          <div class="step-title">Request a written testimonial</div>
+          <div class="step-desc">After delivering value, ask your client: <em>"Would you be willing to write 2–3 sentences about working together that I could use on my website?"</em> Most satisfied clients say yes immediately. One strong, specific testimonial from a real company is worth more than any marketing material you could ever create. Put it on your website, LinkedIn, and capability statement the same day you receive it.</div>
+          <div class="step-footer"><span class="step-tag tag-revenue">Revenue</span><span class="step-time">5 min ask · invaluable result</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s23" onclick="toggle(23)">
+        <div class="step-num" id="n23">23</div>
+        <div class="step-body">
+          <div class="step-title">Launch your first digital product</div>
+          <div class="step-desc">Take one of your completed templates (Manufacturing Readiness Checklist or NPI Gate Review) and sell it on Gumroad or directly from your website for $29–79. Set it up in an evening. This creates passive income and attracts potential consulting clients — the people who buy your templates are the same people who may later hire you directly. Build once, sell repeatedly.</div>
+          <div class="step-footer"><span class="step-tag tag-revenue">Revenue</span><span class="step-time">1 evening to publish</span></div>
+        </div>
+      </div>
+
+      <div class="step-card" id="s24" onclick="toggle(24)">
+        <div class="step-num" id="n24">24</div>
+        <div class="step-body">
+          <div class="step-title">Year-end review — set Year 2 targets</div>
+          <div class="step-desc">At month 12: review what worked, what didn't, what your pipeline looks like, and what your total consulting revenue was. Set Year 2 goals — target 2 recurring clients at $2,000–2,500/month = $4,000–5,000/month. Begin planning a training workshop or online course. By Year 2 you should be firmly on the path to $75K+ annually from consulting alongside your Bailey salary.</div>
+          <div class="step-footer"><span class="step-tag tag-growth">Growth</span><span class="step-time">1 evening · strategic review</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVENUE PANEL -->
+  <div id="panel-revenue" class="panel">
+    <div class="page-header">
+      <div class="page-title">Revenue projections</div>
+      <div class="page-sub">A realistic 5-year view of what this consulting practice can generate.</div>
+    </div>
+
+    <div class="projection-grid">
+      <div class="proj-card">
+        <div class="proj-year">Year 1</div>
+        <div class="proj-amount" style="color:var(--accent);">$30K</div>
+        <div class="proj-detail">1 consulting client<br>$2,500/month avg<br>Building foundation</div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-year">Year 2</div>
+        <div class="proj-amount" style="color:var(--teal);">$75K</div>
+        <div class="proj-detail">2 recurring clients<br>1 project/month<br>Training begins</div>
+      </div>
+      <div class="proj-card">
+        <div class="proj-year">Year 3</div>
+        <div class="proj-amount" style="color:var(--green);">$150K+</div>
+        <div class="proj-detail">3 recurring clients<br>Online training<br>Template library</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow);">
+      <div style="font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:14px;">Target $5,000/month income mix (Year 1–2)</div>
+      <div class="income-row">
+        <span class="income-label">NPI Consulting (primary)</span>
+        <div class="income-bar-track"><div class="income-bar-fill" style="width:50%;background:var(--accent);"></div></div>
+        <span class="income-val">$2,500</span>
+      </div>
+      <div class="income-row">
+        <span class="income-label">Forex trading (accelerator)</span>
+        <div class="income-bar-track"><div class="income-bar-fill" style="width:30%;background:var(--amber);"></div></div>
+        <span class="income-val">$1,500</span>
+      </div>
+      <div class="income-row">
+        <span class="income-label">Documentation / templates</span>
+        <div class="income-bar-track"><div class="income-bar-fill" style="width:20%;background:var(--teal);"></div></div>
+        <span class="income-val">$1,000</span>
+      </div>
+      <div class="income-row" style="border-top:1px solid var(--border);margin-top:4px;padding-top:10px;">
+        <span style="font-weight:500;color:var(--text-primary);">Total monthly target</span>
+        <div class="income-bar-track"><div class="income-bar-fill" style="width:100%;background:var(--green-fill);"></div></div>
+        <span class="income-val" style="color:var(--green);">$5,000</span>
+      </div>
+    </div>
+
+    <div style="background:var(--accent-light);border:1px solid var(--accent-border);border-radius:10px;padding:16px 18px;">
+      <div style="font-size:13px;font-weight:500;color:var(--accent);margin-bottom:6px;">Long-term vision (Years 4–5)</div>
+      <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;">Reduce full-time employment. Consulting becomes primary income. Operate as a boutique engineering consulting firm generating $150,000–$250,000 annually — leveraging decades of expertise rather than starting over in a new field. If demand exceeds your capacity, hire subcontractors. This becomes your professional legacy.</div>
+    </div>
+  </div>
+
+  <!-- RESOURCES PANEL -->
+  <div id="panel-resources" class="panel">
+    <div class="page-header">
+      <div class="page-title">Resources and tools</div>
+      <div class="page-sub">Everything you need to set up and run your consulting business.</div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-title">⚖️ Legal and registration (BC)</div>
+      <div class="link-row"><span class="link-label">BC Registry — register your business name</span><a class="resource-link" href="https://www.bcregistrynames.gov.bc.ca" target="_blank">bcregistrynames.gov.bc.ca</a></div>
+      <div class="link-row"><span class="link-label">CRA — GST/HST registration</span><a class="resource-link" href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/account-register.html" target="_blank">canada.ca/cra-gst-register</a></div>
+      <div class="link-row"><span class="link-label">Consulting agreement template (BC)</span><a class="resource-link" href="https://www.lawdepot.ca/contracts/consulting-agreement/" target="_blank">lawdepot.ca</a></div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-title">💻 Website builders</div>
+      <div class="link-row"><span class="link-label">Wix — easiest to use, free to start</span><a class="resource-link" href="https://www.wix.com" target="_blank">wix.com</a></div>
+      <div class="link-row"><span class="link-label">Squarespace — polished professional templates</span><a class="resource-link" href="https://www.squarespace.com" target="_blank">squarespace.com</a></div>
+      <div class="link-row"><span class="link-label">Webflow — more control, steeper learning curve</span><a class="resource-link" href="https://www.webflow.com" target="_blank">webflow.com</a></div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-title">🧾 Invoicing and bookkeeping</div>
+      <div class="link-row"><span class="link-label">Wave — free invoicing and accounting</span><a class="resource-link" href="https://www.waveapps.com" target="_blank">waveapps.com</a></div>
+      <div class="link-row"><span class="link-label">FreshBooks — ~$15/month, very clean</span><a class="resource-link" href="https://www.freshbooks.com" target="_blank">freshbooks.com</a></div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-title">🌐 Consulting platforms</div>
+      <div class="link-row"><span class="link-label">Toptal — top-tier technical consultants</span><a class="resource-link" href="https://www.toptal.com" target="_blank">toptal.com</a></div>
+      <div class="link-row"><span class="link-label">Expert360 — Canada-focused consulting network</span><a class="resource-link" href="https://www.expert360.com" target="_blank">expert360.com</a></div>
+      <div class="link-row"><span class="link-label">Kolabtree — technical and scientific consulting</span><a class="resource-link" href="https://www.kolabtree.com" target="_blank">kolabtree.com</a></div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-title">📦 Sell digital products</div>
+      <div class="link-row"><span class="link-label">Gumroad — sell templates and digital files instantly</span><a class="resource-link" href="https://www.gumroad.com" target="_blank">gumroad.com</a></div>
+      <div class="link-row"><span class="link-label">Teachable — build and sell online courses</span><a class="resource-link" href="https://www.teachable.com" target="_blank">teachable.com</a></div>
+    </div>
+
+    <div class="resource-card">
+      <div class="resource-title">🤝 LinkedIn groups to join</div>
+      <div class="resource-body">Search on LinkedIn for: "Manufacturing Engineering Network," "NPI Engineering," "Medical Device Manufacturing," "Lean Manufacturing Professionals," "Industrial Automation and Controls." Engage weekly — answer questions, share insights, add value.</div>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS PANEL -->
+  <div id="panel-actions" class="panel">
+    <div class="page-header">
+      <div class="page-title">Quick actions</div>
+      <div class="page-sub">Open Claude and get these high-leverage deliverables built right now.</div>
+    </div>
+
+    <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px;background:var(--accent-light);border:0.5px solid var(--accent-border);border-radius:8px;padding:10px 14px;">
+      These links open Claude.ai in a new tab with your request pre-loaded. Paste them into your Claude conversation to build each deliverable.
+    </div>
+
+    <div class="action-btn" onclick="openClaude('Help me write a LinkedIn headline and About section for my NPI and Manufacturing Readiness consulting business. My name is Solomon Virgo. I have 30+ years of experience across RF, semiconductor, medical devices, telecom, and industrial controls. I specialize in NPI and getting products from concept to full production.')">
+      <div class="action-icon">💼</div>
+      <div class="action-text">
+        <div class="action-title">Write my LinkedIn consulting profile</div>
+        <div class="action-sub">Headline + About section rewritten for consulting positioning</div>
+      </div>
+      <div class="action-arr">↗</div>
+    </div>
+
+    <div class="action-btn" onclick="openClaude('Help me write a one-page professional capability statement PDF for my consulting business. I am Solomon Virgo, a Product Commercialization and Manufacturing Readiness Consultant with 30+ years experience. I specialize in NPI, DFM, manufacturing readiness, and getting products from concept to full production. I have worked across RF, semiconductor, medical devices, telecom, and industrial controls industries. I hold a B.Eng. with 1st Class Honours and have launched over 100 products.')">
+      <div class="action-icon">📄</div>
+      <div class="action-text">
+        <div class="action-title">Draft my capability statement</div>
+        <div class="action-sub">One-page PDF to email potential clients</div>
+      </div>
+      <div class="action-arr">↗</div>
+    </div>
+
+    <div class="action-btn" onclick="openClaude('Help me write my first LinkedIn article titled: 10 Reasons New Product Launches Fail — And How to Avoid Them. I am an NPI and manufacturing readiness consultant with 30+ years experience launching over 100 products across 6 industries. Write it in a practical, experienced voice — lessons from real NPI work, not generic advice. Target length: 800 words.')">
+      <div class="action-icon">✍️</div>
+      <div class="action-text">
+        <div class="action-title">Write my first LinkedIn article</div>
+        <div class="action-sub">"10 Reasons New Product Launches Fail"</div>
+      </div>
+      <div class="action-arr">↗</div>
+    </div>
+
+    <div class="action-btn" onclick="openClaude('Help me write the home page content for my consulting website. Business name: Virgo Manufacturing Solutions (or similar). I am Solomon Virgo, a Product Commercialization and Manufacturing Readiness Consultant. My positioning: I help small and mid-size manufacturers reduce risk and accelerate product launches through expert NPI and manufacturing readiness consulting. Write the hero headline, subheadline, services section, and a short about section.')">
+      <div class="action-icon">🌐</div>
+      <div class="action-text">
+        <div class="action-title">Write my website home page copy</div>
+        <div class="action-sub">Hero, services, and about sections</div>
+      </div>
+      <div class="action-arr">↗</div>
+    </div>
+
+    <div class="action-btn" onclick="openClaude('Help me write a warm outreach message I can send to former colleagues letting them know I have started a manufacturing and NPI consulting practice. The tone should be genuine and conversational — not salesy. I want to reconnect and let them know what I am doing, not pitch them directly.')">
+      <div class="action-icon">💬</div>
+      <div class="action-text">
+        <div class="action-title">Write my warm outreach message</div>
+        <div class="action-sub">For reconnecting with former colleagues</div>
+      </div>
+      <div class="action-arr">↗</div>
+    </div>
+
+    <div class="action-btn" onclick="openClaude('Help me create a Manufacturing Readiness Assessment checklist I can use as a consulting deliverable and eventually sell as a digital product. It should cover: design documentation, BOM readiness, supply chain readiness, test equipment readiness, process documentation, work instructions, quality systems, regulatory compliance, and production floor readiness. Make it comprehensive and professional.')">
+      <div class="action-icon">☑️</div>
+      <div class="action-text">
+        <div class="action-title">Build my Manufacturing Readiness Checklist</div>
+        <div class="action-sub">A sellable consulting deliverable template</div>
+      </div>
+      <div class="action-arr">↗</div>
+    </div>
+
+    <div class="action-btn" onclick="openClaude('Help me write a simple one-page consulting proposal template I can customize per client. It should include: Executive Summary, Understanding of the Challenge, Scope of Work, Deliverables, Timeline, Investment (pricing), About Solomon Virgo, and Terms. Keep it professional and clean.')">
+      <div class="action-icon">📋</div>
+      <div class="action-text">
+        <div class="action-title">Create my proposal template</div>
+        <div class="action-sub">Customizable per client — respond to any opportunity in 24hrs</div>
+      </div>
+      <div class="action-arr">↗</div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'solomon_roadmap_v1';
+const START_DATE = new Date('2025-07-01');
+const PHASE_STEPS = { 1:[1,2,3,4,5], 2:[6,7,8,9], 3:[10,11,12,13,14], 4:[15,16,17,18,19], 5:[20,21,22,23,24] };
+const TOTAL = 24;
+let done = new Set();
+
+function load() {
+  try {
+    const r = localStorage.getItem(STORAGE_KEY);
+    if (r) done = new Set(JSON.parse(r));
+  } catch(e) { done = new Set(); }
+  render();
+  updateDaysCount();
+}
+
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...done])); } catch(e) {}
+}
+
+function toggle(n) {
+  if (done.has(n)) { done.delete(n); } else { done.add(n); showToast('Step ' + n + ' marked complete ✓'); }
+  save();
+  render();
+}
+
+function resetAll() {
+  if (!confirm('Reset all progress? This cannot be undone.')) return;
+  done.clear();
+  save();
+  render();
+  showToast('Progress reset.');
+}
+
+function render() {
+  for (let i = 1; i <= TOTAL; i++) {
+    const card = document.getElementById('s' + i);
+    const num = document.getElementById('n' + i);
+    if (!card || !num) continue;
+    if (done.has(i)) {
+      card.classList.add('done');
+      num.innerHTML = '✓';
+    } else {
+      card.classList.remove('done');
+      num.textContent = i;
+    }
+  }
+  const pct = Math.round((done.size / TOTAL) * 100);
+  const mainFill = document.getElementById('main-fill');
+  if (mainFill) mainFill.style.width = pct + '%';
+  const pctDisplay = document.getElementById('pct-display');
+  if (pctDisplay) pctDisplay.textContent = pct + '%';
+  const stepsDone = document.getElementById('steps-done');
+  if (stepsDone) stepsDone.textContent = done.size;
+  const navCount = document.getElementById('nav-count');
+  if (navCount) navCount.textContent = done.size + '/' + TOTAL;
+
+  for (let p = 1; p <= 5; p++) {
+    const steps = PHASE_STEPS[p];
+    const phDone = steps.filter(s => done.has(s)).length;
+    const phPct = Math.round((phDone / steps.length) * 100);
+    const fill = document.getElementById('ph' + p + '-fill');
+    if (fill) fill.style.width = phPct + '%';
+    const count = document.getElementById('ph' + p + '-count');
+    if (count) count.textContent = phDone + '/' + steps.length;
+  }
+}
+
+function updateDaysCount() {
+  const now = new Date();
+  const days = Math.floor((now - START_DATE) / (1000 * 60 * 60 * 24));
+  const el = document.getElementById('days-count');
+  if (el) el.textContent = days > 0 ? days : '—';
+}
+
+function switchPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.add('active');
+  const btn = document.getElementById('nav-' + name);
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function jumpTo(id) {
+  switchPanel('roadmap');
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 50);
+}
+
+function openClaude(prompt) {
+  const url = 'https://claude.ai/new?q=' + encodeURIComponent(prompt);
+  window.open(url, '_blank');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+load();
+</script>
+</body>
+</html>
